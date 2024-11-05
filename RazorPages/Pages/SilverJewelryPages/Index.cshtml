@@ -1,0 +1,69 @@
+﻿@page
+@model RazorPages.Pages.SilverJewelryPages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    string userRole = Model.UserRole; // Assume Model.LoginResponse.Role holds the role information
+}
+
+<h1>Index</h1>
+<a asp-page="/Login">Login</a>
+
+<!-- Show "Create New" link only if the user is an admin (Role 1) -->
+@if (userRole == "1")
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
+
+<!-- Search form -->
+<form method="get">
+    <div class="form-group">
+        <label for="searchName">Name</label>
+        <input type="text" id="searchName" name="SearchName" class="form-control" value="@Model.SearchName" placeholder="Enter name" />
+    </div>
+    <div class="form-group">
+        <label for="searchWeight">Weight</label>
+        <input type="text" id="searchWeight" name="SearchWeight" class="form-control" value="@Model.SearchWeight" placeholder="Enter weight" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].SilverJewelryName)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].SilverJewelryDescription)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].MetalWeight)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].Price)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].ProductionYear)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].CreatedDate)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].CategoryName)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.SilverJewelry)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.SilverJewelryName)</td>
+                <td>@Html.DisplayFor(modelItem => item.SilverJewelryDescription)</td>
+                <td>@Html.DisplayFor(modelItem => item.MetalWeight)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductionYear)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                <td>
+                    <!-- Show Edit and Delete links only if the user is an admin (Role "1") -->
+                    @if (userRole == "1")
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.SilverJewelryId">Edit</a>
+                        <a asp-page="./Delete" asp-route-id="@item.SilverJewelryId">Delete</a>
+                        <a asp-page="./Details" asp-route-id="@item.SilverJewelryId">Details</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

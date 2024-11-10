@@ -59,7 +59,7 @@ namespace RazorPages.Pages.SilverJewelryPages
             var content = new StringContent(JsonConvert.SerializeObject(SilverJewelry), Encoding.UTF8, "application/json");
 
             //Call add Api
-            var url = "http://localhost:5165/api/silver-jewelry";
+            var url = "http://localhost:5165/odata/SilverJewelry";
             var response = await _httpClient.PostAsync(url, content);
             if (response.IsSuccessStatusCode)
             {

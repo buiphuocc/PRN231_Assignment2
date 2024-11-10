@@ -39,7 +39,7 @@
             <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].Price)</th>
             <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].ProductionYear)</th>
             <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].CreatedDate)</th>
-            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].CategoryName)</th>
+            <th>@Html.DisplayNameFor(model => model.SilverJewelry[0].Category.CategoryName)</th>
             <th></th>
         </tr>
     </thead>
@@ -53,7 +53,7 @@
                 <td>@Html.DisplayFor(modelItem => item.Price)</td>
                 <td>@Html.DisplayFor(modelItem => item.ProductionYear)</td>
                 <td>@Html.DisplayFor(modelItem => item.CreatedDate)</td>
-                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Category.CategoryName)</td>
                 <td>
                     <!-- Show Edit and Delete links only if the user is an admin (Role "1") -->
                     @if (userRole == "1")

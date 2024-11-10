@@ -11,10 +11,10 @@ namespace Services.Interfaces
 {
     public interface ISilverJewelryService
     {
-        Task<IEnumerable<SilverJewelryResponse>> GetAll();
+        Task<IEnumerable<SilverJewelry>> GetAll();
         Task<SilverJewelryResponse> AddSilverJewelryAsync(AddSilverJewelryRequest request);
         Task<IEnumerable<SilverJewelryResponse>> SearchSilverJewelriesAsync(string? name, decimal? weight);
-        Task<SilverJewelryResponse?> UpdateSilverJewelryAsync(AddSilverJewelryRequest request);
+        Task<SilverJewelry> UpdateSilverJewelryAsync(AddSilverJewelryRequest request);
         Task<DeleteSilverJewelryResponse> DeleteSilverJewelryAsync(string silverJewelryId);
     }
 }

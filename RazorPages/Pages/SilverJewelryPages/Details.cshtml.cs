@@ -24,7 +24,7 @@ namespace RazorPages.Pages.SilverJewelryPages
             _httpClient = httpClient;
         }
 
-        public SilverJewelryResponse SilverJewelry { get; set; } = default!;
+        public SilverJewelry SilverJewelry { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
@@ -44,28 +44,27 @@ namespace RazorPages.Pages.SilverJewelryPages
             // Set the authorization header
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-
-            //Serialize Object
-            var content = new StringContent(JsonConvert.SerializeObject(SilverJewelry), Encoding.UTF8, "application/json");
-
-            //Call getAll Api
-            var url = "http://localhost:5165/api/silver-jewelry";
+            //Call get Api
+            var url = $"http://localhost:5165/odata/SilverJewelry?$filter=SilverJewelryId eq '{id}'&expand=Category";
             var response = await _httpClient.GetAsync(url);
-            var jewelries = new List<SilverJewelryResponse>();
             if (response.IsSuccessStatusCode)
             {
                 // Deserialize the response content if successful
-                jewelries = JsonConvert.DeserializeObject<IList<SilverJewelryResponse>>(await response.Content.ReadAsStringAsync()).ToList();
-
+                var silverJewelryResponse = JsonConvert.DeserializeObject<SilverJewelryResponse>(await response.Content.ReadAsStringAsync());
+                SilverJewelry = silverJewelryResponse.Value[0];
+                return Page();
             }
-
-            var silverjewelry = jewelries.FirstOrDefault(m => m.SilverJewelryId == id);
-            if (silverjewelry == null)
+            else
             {
-                return NotFound();
+                // Handle failure with appropriate status code
+                return StatusCode((int)response.StatusCode);
             }
-            SilverJewelry = silverjewelry;
-            return Page();
+        }
+
+        public class SilverJewelryResponse
+        {
+            public string OdataContext { get; set; }
+            public IList<SilverJewelry> Value { get; set; }
         }
     }
 }

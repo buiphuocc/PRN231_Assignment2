@@ -62,7 +62,7 @@ namespace RazorPages.Pages.SilverJewelryPages
 
 
             //Call delete Api
-            var url = "http://localhost:5165/api/silver-jewelry?jewelryId=" + silverJewelryId;
+            var url = "http://localhost:5165/odata/SilverJewelry?jewelryId=" + silverJewelryId;
             var response = await _httpClient.DeleteAsync(url);
             if (response.IsSuccessStatusCode)
             {

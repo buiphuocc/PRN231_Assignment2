@@ -1,11 +1,15 @@
 using Assignment1.ServiceExtension;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Repositories.Data;
+using Repositories.Entities;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +18,29 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+//Add Odata
+var modelBuilder = new ODataConventionModelBuilder();
+modelBuilder.EntitySet<SilverJewelry>("SilverJewelry");
+
+
+
+//Config odata + prevent looping in json response
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+    })
+    .AddOData(
+    options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
+        "odata",
+        modelBuilder.GetEdmModel()));
+
+
+
+builder.Services.AddSwaggerGen();
+//Config swagger for token authen
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API Title", Version = "v1" });
@@ -87,7 +112,14 @@ builder.Logging.AddFilter("Microsoft.AspNetCore.Authorization", LogLevel.Debug);
 // Service Extensions
 builder.Services.AddApplicationServices();
 
+
+//builder.Services.AddEndpointsApiExplorer();
+
+
+
 var app = builder.Build();
+
+app.UseRouting();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -112,6 +144,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.MapControllers();
+// Change app.MapControllers(); to the one bellow for handling conflict between normal apis and odata apis
+//app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

@@ -55,24 +55,24 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<IEnumerable<SilverJewelryResponse>> GetAll()
+        public async Task<IEnumerable<SilverJewelry>> GetAll()
         {
             try
             {
                 var silverJewelries = await _silverJewelryRepository.GetAllSilverJewelriesAsync();
-                var response = silverJewelries.Select(sj => new SilverJewelryResponse
-                {
-                    SilverJewelryId = sj.SilverJewelryId,
-                    SilverJewelryName = sj.SilverJewelryName,
-                    SilverJewelryDescription = sj.SilverJewelryDescription,
-                    MetalWeight = sj.MetalWeight,
-                    Price = sj.Price,
-                    ProductionYear = sj.ProductionYear,
-                    CreatedDate = sj.CreatedDate,
-                    CategoryName = sj.Category?.CategoryName
-                });
+                //var response = silverJewelries.Select(sj => new SilverJewelryResponse
+                //{
+                //    SilverJewelryId = sj.SilverJewelryId,
+                //    SilverJewelryName = sj.SilverJewelryName,
+                //    SilverJewelryDescription = sj.SilverJewelryDescription,
+                //    MetalWeight = sj.MetalWeight,
+                //    Price = sj.Price,
+                //    ProductionYear = sj.ProductionYear,
+                //    CreatedDate = sj.CreatedDate,
+                //    CategoryName = sj.Category?.CategoryName
+                //});
 
-                return response;
+                return silverJewelries;
 
             }catch(Exception ex)
             {
@@ -103,7 +103,7 @@ namespace Services.Implementations
             }
         }
 
-        public async Task<SilverJewelryResponse?> UpdateSilverJewelryAsync(AddSilverJewelryRequest request)
+        public async Task<SilverJewelry> UpdateSilverJewelryAsync(AddSilverJewelryRequest request)
         {
             try
             {
@@ -119,19 +119,19 @@ namespace Services.Implementations
                     CategoryId = request.CategoryId,
                 };
                 var result = await _silverJewelryRepository.UpdateSilverJewelryAsync(silverJewelry);
-                var response = new SilverJewelryResponse
-                {
-                    SilverJewelryId = result.SilverJewelryId,
-                    SilverJewelryName = result.SilverJewelryName,
-                    SilverJewelryDescription = result.SilverJewelryDescription,
-                    MetalWeight = result.MetalWeight,
-                    Price = result.Price,
-                    ProductionYear = result.ProductionYear,
-                    CreatedDate = result.CreatedDate,
-                    CategoryName = result.Category?.CategoryName
-                };
+                //var response = new SilverJewelryResponse
+                //{
+                //    SilverJewelryId = result.SilverJewelryId,
+                //    SilverJewelryName = result.SilverJewelryName,
+                //    SilverJewelryDescription = result.SilverJewelryDescription,
+                //    MetalWeight = result.MetalWeight,
+                //    Price = result.Price,
+                //    ProductionYear = result.ProductionYear,
+                //    CreatedDate = result.CreatedDate,
+                //    CategoryName = result.Category?.CategoryName
+                //};
 
-                return response;
+                return result;
             }
             catch (Exception ex)
             {
